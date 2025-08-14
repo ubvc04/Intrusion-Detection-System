@@ -1,0 +1,17 @@
+# List of known malicious IP addresses (one per line)
+# Example: 192.168.1.100
+
+# Known malware command and control servers
+185.130.44.108
+192.99.142.232
+185.159.82.88
+
+# Known botnet nodes
+45.95.168.207
+91.240.118.168
+
+# Known phishing hosts
+194.87.92.144
+45.153.241.209
+
+# Add your own malicious IPs below

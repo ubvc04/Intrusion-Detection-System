@@ -1,0 +1,234 @@
+{
+    "event_log_rules": [
+        {
+            "name": "Failed Login Attempts",
+            "description": "Detects multiple failed login attempts",
+            "event_id": 4625,
+            "log_name": "Security",
+            "threshold": 5,
+            "timeframe": 300,
+            "severity": "high",
+            "enabled": true
+        },
+        {
+            "name": "Account Lockout",
+            "description": "Detects account lockout events",
+            "event_id": 4740,
+            "log_name": "Security",
+            "threshold": 1,
+            "timeframe": 60,
+            "severity": "medium",
+            "enabled": true
+        },
+        {
+            "name": "Privilege Escalation",
+            "description": "Detects privilege escalation events",
+            "event_id": 4672,
+            "log_name": "Security",
+            "threshold": 1,
+            "timeframe": 60,
+            "severity": "high",
+            "enabled": true
+        },
+        {
+            "name": "User Added to Admin Group",
+            "description": "Detects when a user is added to an administrative group",
+            "event_id": 4732,
+            "log_name": "Security",
+            "threshold": 1,
+            "timeframe": 60,
+            "severity": "high",
+            "enabled": true
+        },
+        {
+            "name": "Security Log Cleared",
+            "description": "Detects when the security log is cleared",
+            "event_id": 1102,
+            "log_name": "Security",
+            "threshold": 1,
+            "timeframe": 60,
+            "severity": "high",
+            "enabled": true
+        },
+        {
+            "name": "Service Installation",
+            "description": "Detects service installation events",
+            "event_id": 7045,
+            "log_name": "System",
+            "threshold": 1,
+            "timeframe": 60,
+            "severity": "medium",
+            "enabled": true
+        },
+        {
+            "name": "Suspicious Process Creation",
+            "description": "Detects creation of potentially malicious processes",
+            "event_id": 4688,
+            "log_name": "Security",
+            "process_names": [
+                "powershell.exe -EncodedCommand",
+                "cmd.exe /c",
+                "wscript.exe",
+                "cscript.exe",
+                "regsvr32.exe",
+                "rundll32.exe",
+                "mshta.exe"
+            ],
+            "threshold": 1,
+            "timeframe": 60,
+            "severity": "high",
+            "enabled": true
+        },
+        {
+            "name": "Application Error",
+            "description": "Detects application crashes which might indicate exploitation",
+            "event_id": 1000,
+            "log_name": "Application",
+            "threshold": 3,
+            "timeframe": 300,
+            "severity": "medium",
+            "enabled": true
+        }
+    ],
+    "file_integrity_rules": [
+        {
+            "name": "System Files Monitoring",
+            "description": "Monitors critical system files for changes",
+            "paths": [
+                "C:\\Windows\\System32\\drivers",
+                "C:\\Windows\\System32\\config",
+                "C:\\Windows\\System32\\*.exe",
+                "C:\\Windows\\System32\\*.dll"
+            ],
+            "exclusions": [
+                "*.log",
+                "*.tmp"
+            ],
+            "check_interval": 300,
+            "severity": "high",
+            "enabled": true
+        },
+        {
+            "name": "Boot Configuration Monitoring",
+            "description": "Monitors boot configuration files for changes",
+            "paths": [
+                "C:\\Boot",
+                "C:\\Windows\\bootstat.dat",
+                "C:\\Windows\\Bootmgr",
+                "C:\\Windows\\Bootmgfw.efi"
+            ],
+            "exclusions": [],
+            "check_interval": 600,
+            "severity": "critical",
+            "enabled": true
+        },
+        {
+            "name": "User Profile Monitoring",
+            "description": "Monitors user profile directories for suspicious changes",
+            "paths": [
+                "C:\\Users\\*\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\*",
+                "C:\\Users\\*\\AppData\\Roaming\\Microsoft\\Windows\\Templates\\*"
+            ],
+            "exclusions": [
+                "*.lnk"
+            ],
+            "check_interval": 300,
+            "severity": "medium",
+            "enabled": true
+        },
+        {
+            "name": "Hosts File Monitoring",
+            "description": "Monitors the hosts file for changes",
+            "paths": [
+                "C:\\Windows\\System32\\drivers\\etc\\hosts"
+            ],
+            "exclusions": [],
+            "check_interval": 300,
+            "severity": "high",
+            "enabled": true
+        },
+        {
+            "name": "Scheduled Tasks Monitoring",
+            "description": "Monitors scheduled tasks for changes",
+            "paths": [
+                "C:\\Windows\\System32\\Tasks\\*",
+                "C:\\Windows\\Tasks\\*"
+            ],
+            "exclusions": [],
+            "check_interval": 300,
+            "severity": "medium",
+            "enabled": true
+        }
+    ],
+    "registry_monitoring_rules": [
+        {
+            "name": "Autorun Keys Monitoring",
+            "description": "Monitors registry autorun keys for changes",
+            "keys": [
+                "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+                "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+                "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+                "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",
+                "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+                "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+            ],
+            "check_interval": 300,
+            "severity": "high",
+            "enabled": true
+        },
+        {
+            "name": "Service Control Manager Monitoring",
+            "description": "Monitors registry keys related to services",
+            "keys": [
+                "HKLM\\SYSTEM\\CurrentControlSet\\Services"
+            ],
+            "check_interval": 300,
+            "severity": "high",
+            "enabled": true
+        },
+        {
+            "name": "Winlogon Monitoring",
+            "description": "Monitors Winlogon registry keys for changes",
+            "keys": [
+                "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+                "HKCU\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"
+            ],
+            "check_interval": 300,
+            "severity": "high",
+            "enabled": true
+        },
+        {
+            "name": "Boot Execute Monitoring",
+            "description": "Monitors boot execute registry keys",
+            "keys": [
+                "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager",
+                "HKLM\\SYSTEM\\CurrentControlSet\\Control\\BootVerificationProgram"
+            ],
+            "check_interval": 300,
+            "severity": "critical",
+            "enabled": true
+        },
+        {
+            "name": "Browser Helper Objects Monitoring",
+            "description": "Monitors Browser Helper Objects registry keys",
+            "keys": [
+                "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Browser Helper Objects",
+                "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Browser Helper Objects"
+            ],
+            "check_interval": 300,
+            "severity": "medium",
+            "enabled": true
+        },
+        {
+            "name": "AppInit DLLs Monitoring",
+            "description": "Monitors AppInit DLLs registry keys",
+            "keys": [
+                "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\AppInit_DLLs",
+                "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\AppInit_DLLs"
+            ],
+            "check_interval": 300,
+            "severity": "high",
+            "enabled": true
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+# Manager component package initialization

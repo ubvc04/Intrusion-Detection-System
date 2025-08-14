@@ -1,0 +1,17 @@
+# List of suspicious domains (one per line)
+# Example: malicious-domain.com
+
+# Known malware distribution domains
+malware-domain-example.com
+another-suspicious-domain.com
+phishing-site-example.net
+
+# Known phishing domains
+fake-bank-login.com
+secure-account-verify.net
+
+# Known command and control domains
+c2-server-example.org
+bot-control-domain.com
+
+# Add your own suspicious domains below

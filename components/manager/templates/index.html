@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDS Security Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Socket.IO client -->
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom scrollbar for Webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        
+        /* Animation for new events */
+        @keyframes highlight {
+            0% { background-color: rgba(239, 68, 68, 0.2); }
+            100% { background-color: transparent; }
+        }
+        .highlight-animation {
+            animation: highlight 2s ease-out;
+        }
+    </style>
+    <script>
+        // Configure Tailwind dark mode
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-blue': '#0f172a',
+                        'dark-blue-light': '#1e293b'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-900 text-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-slate-800 shadow-md py-4 px-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-shield-alt text-blue-500 text-2xl"></i>
+                <h1 class="text-xl font-bold">Windows IDS Security Dashboard</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="connection-status" class="px-3 py-1 rounded-full text-xs font-medium bg-green-500">
+                    <i class="fas fa-circle text-xs mr-1"></i> Connected
+                </span>
+                <span id="current-time" class="text-sm"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Security Monitor Section -->
+        <section class="lg:col-span-2 flex flex-col">
+            <div class="bg-slate-800 rounded-lg shadow-lg p-4 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold">Security Monitor</h2>
+                    <div class="flex space-x-2">
+                        <button id="pause-events" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded text-sm">
+                            <i class="fas fa-pause mr-1"></i> Pause
+                        </button>
+                        <button id="clear-events" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded text-sm">
+                            <i class="fas fa-trash-alt mr-1"></i> Clear
+                        </button>
+                    </div>
+                </div>
+                <div id="events-container" class="overflow-y-auto h-[calc(100vh-20rem)] rounded-lg bg-slate-900">
+                    <div id="events-list" class="divide-y divide-slate-700">
+                        <!-- Events will be added here dynamically -->
+                        <div class="p-4 text-center text-gray-400">
+                            <i class="fas fa-spinner fa-spin mr-2"></i> Waiting for events...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Details Panel (hidden by default) -->
+            <div id="event-details-panel" class="bg-slate-800 rounded-lg shadow-lg p-4 hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-semibold">Event Details</h2>
+                    <button id="close-details" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="event-details-content" class="bg-slate-900 rounded-lg p-4 overflow-y-auto max-h-[30rem]">
+                    <!-- Event details will be added here dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Sidebar -->
+        <section class="space-y-6">
+            <!-- System Status -->
+            <div class="bg-slate-800 rounded-lg shadow-lg p-4">
+                <h2 class="text-lg font-semibold mb-4">System Status</h2>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm">HIDS Agent</span>
+                            <span id="hids-status" class="text-xs px-2 py-0.5 rounded-full bg-green-500">Active</span>
+                        </div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm">NIDS Sensor</span>
+                            <span id="nids-status" class="text-xs px-2 py-0.5 rounded-full bg-green-500">Active</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm">Manager</span>
+                            <span id="manager-status" class="text-xs px-2 py-0.5 rounded-full bg-green-500">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Statistics -->
+            <div class="bg-slate-800 rounded-lg shadow-lg p-4">
+                <h2 class="text-lg font-semibold mb-4">Event Statistics</h2>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-slate-700 p-3 rounded-lg text-center">
+                            <div id="total-events" class="text-2xl font-bold">0</div>
+                            <div class="text-xs text-gray-400">Total Events</div>
+                        </div>
+                        <div class="bg-slate-700 p-3 rounded-lg text-center">
+                            <div id="critical-events" class="text-2xl font-bold text-red-500">0</div>
+                            <div class="text-xs text-gray-400">Critical</div>
+                        </div>
+                        <div class="bg-slate-700 p-3 rounded-lg text-center">
+                            <div id="warning-events" class="text-2xl font-bold text-yellow-500">0</div>
+                            <div class="text-xs text-gray-400">Warning</div>
+                        </div>
+                        <div class="bg-slate-700 p-3 rounded-lg text-center">
+                            <div id="info-events" class="text-2xl font-bold text-blue-500">0</div>
+                            <div class="text-xs text-gray-400">Info</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium mb-2">Events by Source</h3>
+                        <canvas id="source-chart" height="150"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitored Hosts -->
+            <div class="bg-slate-800 rounded-lg shadow-lg p-4">
+                <h2 class="text-lg font-semibold mb-4">Monitored Hosts</h2>
+                <div id="hosts-container" class="space-y-3">
+                    <div id="hosts-list" class="space-y-2">
+                        <!-- Hosts will be added here dynamically -->
+                        <div class="p-4 text-center text-gray-400">
+                            <i class="fas fa-spinner fa-spin mr-2"></i> Loading hosts...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-slate-800 rounded-lg shadow-lg p-4">
+                <h2 class="text-lg font-semibold mb-4">Filters</h2>
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-sm text-gray-400 block mb-1">Severity</label>
+                        <div class="flex space-x-2">
+                            <button data-filter="severity" data-value="critical" class="filter-btn px-2 py-1 text-xs rounded-full bg-red-500/20 text-red-500 border border-red-500/30 hover:bg-red-500/30">Critical</button>
+                            <button data-filter="severity" data-value="warning" class="filter-btn px-2 py-1 text-xs rounded-full bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 hover:bg-yellow-500/30">Warning</button>
+                            <button data-filter="severity" data-value="info" class="filter-btn px-2 py-1 text-xs rounded-full bg-blue-500/20 text-blue-500 border border-blue-500/30 hover:bg-blue-500/30">Info</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400 block mb-1">Source</label>
+                        <div class="flex space-x-2">
+                            <button data-filter="source" data-value="hids" class="filter-btn px-2 py-1 text-xs rounded-full bg-purple-500/20 text-purple-500 border border-purple-500/30 hover:bg-purple-500/30">HIDS</button>
+                            <button data-filter="source" data-value="nids" class="filter-btn px-2 py-1 text-xs rounded-full bg-green-500/20 text-green-500 border border-green-500/30 hover:bg-green-500/30">NIDS</button>
+                        </div>
+                    </div>
+                    <div>
+                        <button id="reset-filters" class="w-full mt-2 px-3 py-1 bg-slate-700 hover:bg-slate-600 rounded text-sm">
+                            Reset Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 py-3 px-6 text-center text-sm text-gray-400">
+        <p>Windows IDS Security Dashboard &copy; 2023</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize variables
+            let socket;
+            let eventsList = [];
+            let paused = false;
+            let activeFilters = {
+                severity: [],
+                source: []
+            };
+            let sourceChart;
+            let stats = {
+                total: 0,
+                critical: 0,
+                warning: 0,
+                info: 0,
+                sources: {
+                    hids: 0,
+                    nids: 0
+                }
+            };
+
+            // DOM elements
+            const eventsContainer = document.getElementById('events-container');
+            const eventsList_el = document.getElementById('events-list');
+            const pauseBtn = document.getElementById('pause-events');
+            const clearBtn = document.getElementById('clear-events');
+            const connectionStatus = document.getElementById('connection-status');
+            const currentTime = document.getElementById('current-time');
+            const totalEvents = document.getElementById('total-events');
+            const criticalEvents = document.getElementById('critical-events');
+            const warningEvents = document.getElementById('warning-events');
+            const infoEvents = document.getElementById('info-events');
+            const eventDetailsPanel = document.getElementById('event-details-panel');
+            const eventDetailsContent = document.getElementById('event-details-content');
+            const closeDetailsBtn = document.getElementById('close-details');
+            const resetFiltersBtn = document.getElementById('reset-filters');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+
+            // Initialize Socket.IO connection
+            function initializeSocket() {
+                // Get the current host and port from the URL
+                const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                const host = window.location.hostname;
+                const port = window.location.port;
+                
+                // Create Socket.IO connection
+                // Use the current page URL for connection to ensure it works with any IP
+                socket = io(window.location.origin);
+                
+                console.log(`Connecting to Socket.IO server at ${window.location.href}`);
+
+                // Socket.IO event handlers
+                socket.on('connect', function() {
+                    console.log('Connected to server');
+                    connectionStatus.classList.remove('bg-red-500');
+                    connectionStatus.classList.add('bg-green-500');
+                    connectionStatus.innerHTML = '<i class="fas fa-circle text-xs mr-1"></i> Connected';
+                });
+
+                socket.on('disconnect', function() {
+                    console.log('Disconnected from server');
+                    connectionStatus.classList.remove('bg-green-500');
+                    connectionStatus.classList.add('bg-red-500');
+                    connectionStatus.innerHTML = '<i class="fas fa-circle text-xs mr-1"></i> Disconnected';
+                });
+
+                socket.on('new_event', function(event) {
+                    console.log('New event received:', event);
+                    if (!paused) {
+                        addEvent(event);
+                    }
+                });
+            }
+
+            // Initialize charts
+            function initializeCharts() {
+                const sourceChartCtx = document.getElementById('source-chart').getContext('2d');
+                sourceChart = new Chart(sourceChartCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['HIDS', 'NIDS'],
+                        datasets: [{
+                            data: [0, 0],
+                            backgroundColor: ['rgba(168, 85, 247, 0.8)', 'rgba(34, 197, 94, 0.8)'],
+                            borderColor: ['rgb(168, 85, 247)', 'rgb(34, 197, 94)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#f1f5f9',
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Add event to the list
+            function addEvent(event) {
+                // Add event to the list
+                eventsList.unshift(event);
+                
+                // Update statistics
+                updateStats(event, true);
+                
+                // Render events
+                renderEvents();
+            }
+
+            // Render events based on filters
+            function renderEvents() {
+                // Clear events list
+                eventsList_el.innerHTML = '';
+                
+                // Filter events
+                const filteredEvents = filterEvents(eventsList);
+                
+                // Check if there are events
+                if (filteredEvents.length === 0) {
+                    eventsList_el.innerHTML = `
+                        <div class="p-4 text-center text-gray-400">
+                            <i class="fas fa-info-circle mr-2"></i> No events to display
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Render events
+                filteredEvents.forEach((event, index) => {
+                    const eventElement = createEventElement(event, index === 0);
+                    eventsList_el.appendChild(eventElement);
+                });
+            }
+
+            // Create event element
+            function createEventElement(event, isNew) {
+                const eventElement = document.createElement('div');
+                eventElement.className = `p-4 hover:bg-slate-800 cursor-pointer transition-colors ${isNew ? 'highlight-animation' : ''}`;
+                eventElement.dataset.eventId = event.id;
+                
+                // Get icon based on event type
+                let icon = 'fa-exclamation-circle';
+                let iconColor = 'text-blue-500';
+                
+                if (event.type === 'file_integrity') {
+                    icon = 'fa-file-alt';
+                } else if (event.type === 'registry') {
+                    icon = 'fa-cogs';
+                } else if (event.type === 'process') {
+                    icon = 'fa-microchip';
+                } else if (event.type === 'network') {
+                    icon = 'fa-network-wired';
+                } else if (event.type === 'dns') {
+                    icon = 'fa-globe';
+                } else if (event.type === 'http') {
+                    icon = 'fa-cloud';
+                } else if (event.type === 'smtp') {
+                    icon = 'fa-envelope';
+                }
+                
+                // Get color based on severity
+                if (event.severity === 'critical') {
+                    iconColor = 'text-red-500';
+                } else if (event.severity === 'warning') {
+                    iconColor = 'text-yellow-500';
+                } else if (event.severity === 'info') {
+                    iconColor = 'text-blue-500';
+                }
+                
+                // Format timestamp
+                const timestamp = new Date(event.timestamp);
+                const formattedTime = timestamp.toLocaleTimeString();
+                
+                // Create event HTML
+                eventElement.innerHTML = `
+                    <div class="flex items-start">
+                        <div class="mr-3">
+                            <i class="fas ${icon} ${iconColor} text-xl"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-medium">${event.message}</h3>
+                                <span class="text-xs text-gray-400 ml-2">${formattedTime}</span>
+                            </div>
+                            <div class="text-sm text-gray-400 mt-1">${event.details || ''}</div>
+                            <div class="flex mt-2 space-x-2">
+                                <span class="text-xs px-2 py-0.5 rounded-full ${event.source === 'hids' ? 'bg-purple-500/20 text-purple-500' : 'bg-green-500/20 text-green-500'}">
+                                    ${event.source.toUpperCase()}
+                                </span>
+                                <span class="text-xs px-2 py-0.5 rounded-full ${getSeverityClass(event.severity)}">
+                                    ${event.severity.charAt(0).toUpperCase() + event.severity.slice(1)}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Add click event listener
+                eventElement.addEventListener('click', () => {
+                    showEventDetails(event);
+                });
+                
+                return eventElement;
+            }
+
+            // Show event details
+            function showEventDetails(event) {
+                // Format timestamp
+                const timestamp = new Date(event.timestamp);
+                const formattedTime = timestamp.toLocaleString();
+                
+                // Create details HTML
+                let detailsHTML = `
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-lg font-medium">${event.message}</h3>
+                            <p class="text-sm text-gray-400">${formattedTime}</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-400">Source</p>
+                                <p>${event.source.toUpperCase()}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-400">Type</p>
+                                <p>${event.type.replace('_', ' ').charAt(0).toUpperCase() + event.type.replace('_', ' ').slice(1)}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-400">Severity</p>
+                                <p class="${getSeverityTextClass(event.severity)}">${event.severity.charAt(0).toUpperCase() + event.severity.slice(1)}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-400">ID</p>
+                                <p>${event.id}</p>
+                            </div>
+                        </div>
+                `;
+                
+                // Add details if available
+                if (event.details) {
+                    detailsHTML += `
+                        <div>
+                            <p class="text-sm text-gray-400">Details</p>
+                            <p>${event.details}</p>
+                        </div>
+                    `;
+                }
+                
+                // Add data if available
+                if (event.data) {
+                    detailsHTML += `
+                        <div>
+                            <p class="text-sm text-gray-400">Data</p>
+                            <pre class="bg-slate-800 p-3 rounded text-xs overflow-x-auto">${JSON.stringify(event.data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+                
+                // Close details div
+                detailsHTML += `</div>`;
+                
+                // Set details content
+                eventDetailsContent.innerHTML = detailsHTML;
+                
+                // Show details panel
+                eventDetailsPanel.classList.remove('hidden');
+            }
+
+            // Filter events based on active filters
+            function filterEvents(events) {
+                return events.filter(event => {
+                    // Check severity filter
+                    if (activeFilters.severity.length > 0 && !activeFilters.severity.includes(event.severity)) {
+                        return false;
+                    }
+                    
+                    // Check source filter
+                    if (activeFilters.source.length > 0 && !activeFilters.source.includes(event.source)) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+            }
+
+            // Update statistics
+            function updateStats(event, increment) {
+                const delta = increment ? 1 : -1;
+                
+                // Update total
+                stats.total += delta;
+                
+                // Update severity counts
+                if (event.severity === 'critical') {
+                    stats.critical += delta;
+                } else if (event.severity === 'warning') {
+                    stats.warning += delta;
+                } else if (event.severity === 'info') {
+                    stats.info += delta;
+                }
+                
+                // Update source counts
+                if (event.source === 'hids') {
+                    stats.sources.hids += delta;
+                } else if (event.source === 'nids') {
+                    stats.sources.nids += delta;
+                }
+                
+                // Update UI
+                totalEvents.textContent = stats.total;
+                criticalEvents.textContent = stats.critical;
+                warningEvents.textContent = stats.warning;
+                infoEvents.textContent = stats.info;
+                
+                // Update chart
+                sourceChart.data.datasets[0].data = [stats.sources.hids, stats.sources.nids];
+                sourceChart.update();
+            }
+
+            // Get severity class for badges
+            function getSeverityClass(severity) {
+                if (severity === 'critical') {
+                    return 'bg-red-500/20 text-red-500';
+                } else if (severity === 'warning') {
+                    return 'bg-yellow-500/20 text-yellow-500';
+                } else {
+                    return 'bg-blue-500/20 text-blue-500';
+                }
+            }
+
+            // Get severity text class
+            function getSeverityTextClass(severity) {
+                if (severity === 'critical') {
+                    return 'text-red-500';
+                } else if (severity === 'warning') {
+                    return 'text-yellow-500';
+                } else {
+                    return 'text-blue-500';
+                }
+            }
+
+            // Update current time
+            function updateCurrentTime() {
+                const now = new Date();
+                currentTime.textContent = now.toLocaleString();
+            }
+
+            // Event listeners
+            pauseBtn.addEventListener('click', function() {
+                paused = !paused;
+                if (paused) {
+                    pauseBtn.innerHTML = '<i class="fas fa-play mr-1"></i> Resume';
+                    pauseBtn.classList.add('bg-blue-600');
+                    pauseBtn.classList.remove('bg-slate-700');
+                } else {
+                    pauseBtn.innerHTML = '<i class="fas fa-pause mr-1"></i> Pause';
+                    pauseBtn.classList.remove('bg-blue-600');
+                    pauseBtn.classList.add('bg-slate-700');
+                    renderEvents();
+                }
+            });
+
+            clearBtn.addEventListener('click', function() {
+                eventsList = [];
+                stats = {
+                    total: 0,
+                    critical: 0,
+                    warning: 0,
+                    info: 0,
+                    sources: {
+                        hids: 0,
+                        nids: 0
+                    }
+                };
+                totalEvents.textContent = '0';
+                criticalEvents.textContent = '0';
+                warningEvents.textContent = '0';
+                infoEvents.textContent = '0';
+                sourceChart.data.datasets[0].data = [0, 0];
+                sourceChart.update();
+                renderEvents();
+            });
+
+            closeDetailsBtn.addEventListener('click', function() {
+                eventDetailsPanel.classList.add('hidden');
+            });
+
+            resetFiltersBtn.addEventListener('click', function() {
+                activeFilters = {
+                    severity: [],
+                    source: []
+                };
+                
+                // Reset filter buttons
+                filterBtns.forEach(btn => {
+                    btn.classList.remove('ring-2', 'ring-white');
+                });
+                
+                // Render events
+                renderEvents();
+            });
+
+            // Filter buttons
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filterType = this.dataset.filter;
+                    const filterValue = this.dataset.value;
+                    
+                    // Toggle filter
+                    const index = activeFilters[filterType].indexOf(filterValue);
+                    if (index === -1) {
+                        activeFilters[filterType].push(filterValue);
+                        this.classList.add('ring-2', 'ring-white');
+                    } else {
+                        activeFilters[filterType].splice(index, 1);
+                        this.classList.remove('ring-2', 'ring-white');
+                    }
+                    
+                    // Render events
+                    renderEvents();
+                });
+            });
+
+            // Fetch hosts data
+            function fetchHosts() {
+                fetch('./api/hosts')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Hosts data received:', data);
+                        if (data.status === 'success' && data.data && data.data.hosts) {
+                            displayHosts(data.data.hosts);
+                        } else {
+                            displayHosts([]);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching hosts:', error);
+                        displayHosts([]);
+                    });
+            }
+
+            // Display hosts in the UI
+            function displayHosts(hosts) {
+                const hostsList = document.getElementById('hosts-list');
+                
+                if (hosts.length === 0) {
+                    hostsList.innerHTML = `
+                        <div class="p-4 text-center text-gray-400">
+                            No hosts found
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                hosts.forEach(host => {
+                    const lastSeen = new Date(host.last_seen).toLocaleString();
+                    const status = 'active'; // Assuming all hosts are active for now
+                    
+                    html += `
+                        <div class="bg-slate-700 p-3 rounded-lg">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-sm font-semibold">${host.hostname}</h3>
+                                <span class="px-2 py-0.5 rounded-full text-xs font-medium ${status === 'active' ? 'bg-green-500' : 'bg-red-500'}">
+                                    ${status === 'active' ? 'Online' : 'Offline'}
+                                </span>
+                            </div>
+                            <div class="space-y-1 text-xs">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">IP:</span>
+                                    <span>${host.ip_address || 'Unknown'}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">OS:</span>
+                                    <span>${host.os_info || 'Unknown'}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Last Seen:</span>
+                                    <span>${lastSeen}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                hostsList.innerHTML = html;
+            }
+
+            // Initialize
+            initializeSocket();
+            initializeCharts();
+            updateCurrentTime();
+            fetchHosts(); // Fetch hosts on page load
+            setInterval(updateCurrentTime, 1000);
+            setInterval(fetchHosts, 60000); // Refresh hosts every minute
+
+            // Add some test events for development
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                // Uncomment for testing
+                /*
+                setTimeout(() => {
+                    addEvent({
+                        id: '1',
+                        timestamp: new Date().toISOString(),
+                        source: 'hids',
+                        type: 'file_integrity',
+                        severity: 'critical',
+                        message: 'Critical system file modified',
+                        details: 'C:\\Windows\\System32\\drivers\\etc\\hosts was modified by an unauthorized process',
+                        data: {
+                            file: 'C:\\Windows\\System32\\drivers\\etc\\hosts',
+                            process: 'notepad.exe',
+                            pid: 1234
+                        }
+                    });
+                }, 1000);
+
+                setTimeout(() => {
+                    addEvent({
+                        id: '2',
+                        timestamp: new Date().toISOString(),
+                        source: 'nids',
+                        type: 'network',
+                        severity: 'warning',
+                        message: 'Suspicious outbound connection detected',
+                        details: 'Connection to known malicious IP address',
+                        data: {
+                            source_ip: '192.168.1.100',
+                            destination_ip: '203.0.113.100',
+                            destination_port: 8080,
+                            protocol: 'TCP'
+                        }
+                    });
+                }, 2000);
+
+                setTimeout(() => {
+                    addEvent({
+                        id: '3',
+                        timestamp: new Date().toISOString(),
+                        source: 'hids',
+                        type: 'process',
+                        severity: 'info',
+                        message: 'New process started',
+                        details: 'Process cmd.exe started by explorer.exe',
+                        data: {
+                            process_name: 'cmd.exe',
+                            process_id: 5678,
+                            parent_process: 'explorer.exe',
+                            parent_process_id: 1234,
+                            command_line: 'cmd.exe /c dir'
+                        }
+                    });
+                }, 3000);
+                */
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+2025-08-14 13:12:43 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 13:12:43 - ids.manager - INFO - Starting IDS Manager
+2025-08-14 13:12:43 - ids.manager - INFO - Database initialized successfully
+2025-08-14 13:12:43 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 13:12:43 - ids.manager - INFO - Starting maintenance task
+2025-08-14 13:12:43 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 13:12:43 - ids.manager - INFO - Performing database cleanup, removing events older than 2025-07-15
+2025-08-14 13:12:43 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 13:12:43 - ids.manager - INFO - Deleted 0 old events from database
+2025-08-14 13:12:43 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 13:12:43 - ids.manager - INFO - IDS Manager started on 0.0.0.0:5000
+2025-08-14 13:13:21 - ids.manager - ERROR - Error serving static file index.html: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2025-08-14 13:13:21 - ids.manager - ERROR - Error serving static file index.html: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2025-08-14 13:17:22 - ids.manager - ERROR - Error serving static file index.html: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2025-08-14 13:18:21 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 13:18:21 - ids.manager - INFO - Starting IDS Manager
+2025-08-14 13:18:21 - ids.manager - INFO - Database initialized successfully
+2025-08-14 13:18:21 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 13:18:21 - ids.manager - INFO - Starting maintenance task
+2025-08-14 13:18:21 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 13:18:21 - ids.manager - INFO - Performing database cleanup, removing events older than 2025-07-15
+2025-08-14 13:18:21 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 13:18:21 - ids.manager - INFO - Deleted 0 old events from database
+2025-08-14 13:18:21 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 13:18:21 - ids.manager - INFO - IDS Manager started on 0.0.0.0:5000
+2025-08-14 14:38:06 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 14:38:06 - ids.manager - INFO - Starting IDS Manager
+2025-08-14 14:38:06 - ids.manager - INFO - Database initialized successfully
+2025-08-14 14:38:06 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 14:38:06 - ids.manager - INFO - Starting maintenance task
+2025-08-14 14:38:06 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 14:38:06 - ids.manager - INFO - Performing database cleanup, removing events older than 2025-07-15
+2025-08-14 14:38:06 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 14:38:06 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 14:38:06 - ids.manager - INFO - IDS Manager started on 0.0.0.0:5000
+2025-08-14 14:38:06 - ids.manager - ERROR - Error getting events: Recursive use of cursors not allowed.
+2025-08-14 14:38:06 - ids.manager - INFO - Deleted 0 old events from database
+2025-08-14 14:38:11 - ids.manager - ERROR - Error in get_events: 'NoneType' object is not subscriptable
+2025-08-14 14:38:11 - ids.manager - ERROR - Error getting events: Recursive use of cursors not allowed.
+2025-08-14 15:08:08 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 15:08:08 - ids.manager - INFO - Starting IDS Manager
+2025-08-14 15:08:08 - ids.manager - INFO - Database initialized successfully
+2025-08-14 15:08:08 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 15:08:08 - ids.manager - INFO - Starting maintenance task
+2025-08-14 15:08:08 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 15:08:08 - ids.manager - INFO - Performing database cleanup, removing events older than 2025-07-15
+2025-08-14 15:08:08 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 15:08:08 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 15:08:08 - ids.manager - INFO - IDS Manager started on 0.0.0.0:5000
+2025-08-14 15:08:08 - ids.manager - INFO - Deleted 0 old events from database
+2025-08-14 15:08:15 - ids.manager - ERROR - Error getting events: Recursive use of cursors not allowed.
+2025-08-14 15:08:15 - ids.manager - ERROR - Error getting event count: Recursive use of cursors not allowed.
+2025-08-14 15:13:36 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 15:13:36 - ids.manager - INFO - Starting IDS Manager
+2025-08-14 15:13:36 - ids.manager - INFO - Database initialized successfully
+2025-08-14 15:13:36 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 15:13:36 - ids.manager - INFO - Starting maintenance task
+2025-08-14 15:13:36 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 15:13:36 - ids.manager - INFO - Performing database cleanup, removing events older than 2025-07-15
+2025-08-14 15:13:36 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 15:13:36 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 15:13:36 - ids.manager - INFO - IDS Manager started on 0.0.0.0:5000
+2025-08-14 15:13:36 - ids.manager - INFO - Deleted 0 old events from database
+2025-08-14 15:13:40 - ids.manager - ERROR - Error getting events: Recursive use of cursors not allowed.
+2025-08-14 15:13:40 - ids.manager - ERROR - Error getting event count: Recursive use of cursors not allowed.
+2025-08-14 17:13:11 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 17:13:52 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 17:16:20 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 17:20:41 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 17:33:47 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 18:46:23 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 18:50:38 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 18:50:38 - ids.manager - INFO - Starting IDS Manager
+2025-08-14 18:50:38 - ids.manager - INFO - Database initialized successfully
+2025-08-14 18:50:38 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 18:50:38 - ids.manager - INFO - Starting maintenance task
+2025-08-14 18:50:38 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 18:50:38 - ids.manager - INFO - Performing database cleanup, removing events older than 2025-07-15
+2025-08-14 18:50:38 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 18:50:38 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 18:50:38 - ids.manager - INFO - IDS Manager started on 0.0.0.0:5000
+2025-08-14 18:50:38 - ids.manager - INFO - Deleted 0 old events from database
+2025-08-14 18:52:05 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 18:52:05 - ids.manager - INFO - Starting IDS Manager
+2025-08-14 18:52:05 - ids.manager - INFO - Database initialized successfully
+2025-08-14 18:52:05 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 18:52:05 - ids.manager - INFO - Starting maintenance task
+2025-08-14 18:52:05 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 18:52:05 - ids.manager - INFO - Performing database cleanup, removing events older than 2025-07-15
+2025-08-14 18:52:05 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 18:52:05 - ids.manager - INFO - Deleted 0 old events from database
+2025-08-14 18:52:05 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 18:52:05 - ids.manager - INFO - IDS Manager started on 0.0.0.0:5000
+2025-08-14 18:58:09 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 18:58:09 - ids.manager - INFO - Starting IDS Manager
+2025-08-14 18:58:09 - ids.manager - INFO - Database initialized successfully
+2025-08-14 18:58:09 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 18:58:09 - ids.manager - INFO - Starting maintenance task
+2025-08-14 18:58:09 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 18:58:09 - ids.manager - INFO - Performing database cleanup, removing events older than 2025-07-15
+2025-08-14 18:58:09 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 18:58:09 - ids.manager - INFO - Deleted 0 old events from database
+2025-08-14 18:58:09 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 18:58:09 - ids.manager - INFO - IDS Manager started on 0.0.0.0:5000
+2025-08-14 19:07:18 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 19:07:18 - ids.manager - INFO - Starting IDS Manager
+2025-08-14 19:07:18 - ids.manager - INFO - Database initialized successfully
+2025-08-14 19:07:18 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 19:07:18 - ids.manager - INFO - Starting maintenance task
+2025-08-14 19:07:18 - ids.manager - INFO - Performing database cleanup, removing events older than 2025-07-15
+2025-08-14 19:07:18 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 19:07:18 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 19:07:18 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 19:07:18 - ids.manager - INFO - IDS Manager started on 0.0.0.0:5000
+2025-08-14 19:07:18 - ids.manager - INFO - Deleted 0 old events from database
+2025-08-14 19:14:58 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 19:14:58 - ids.manager - INFO - Starting IDS Manager
+2025-08-14 19:14:58 - ids.manager - INFO - Database initialized successfully
+2025-08-14 19:14:58 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 19:14:58 - ids.manager - INFO - Starting maintenance task
+2025-08-14 19:14:58 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 19:14:58 - ids.manager - INFO - Performing database cleanup, removing events older than 2025-07-15
+2025-08-14 19:14:58 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 19:14:58 - ids.manager - INFO - Deleted 0 old events from database
+2025-08-14 19:14:58 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 19:14:58 - ids.manager - INFO - IDS Manager started on 0.0.0.0:5000
+2025-08-14 19:18:33 - ids.manager - ERROR - Error in get_events: 'NoneType' object is not subscriptable
+2025-08-14 19:20:03 - ids.manager - ERROR - Error in get_events: 'NoneType' object is not subscriptable
+2025-08-14 19:22:41 - ids.manager - ERROR - Error in get_events: tuple index out of range
+2025-08-14 19:24:14 - ids.manager - INFO - Initializing IDS Manager
+2025-08-14 19:24:14 - ids.manager - INFO - Starting IDS Manager
+2025-08-14 19:24:14 - ids.manager - INFO - Database initialized successfully
+2025-08-14 19:24:14 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 19:24:14 - ids.manager - INFO - Starting maintenance task
+2025-08-14 19:24:14 - ids.manager - INFO - Starting API server on 0.0.0.0:5000
+2025-08-14 19:24:14 - ids.manager - INFO - Performing database cleanup, removing events older than 2025-07-15
+2025-08-14 19:24:14 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 19:24:14 - ids.manager - INFO - Deleted 0 old events from database
+2025-08-14 19:24:14 - ids.manager - INFO - Starting event correlation engine
+2025-08-14 19:24:14 - ids.manager - INFO - IDS Manager started on 0.0.0.0:5000

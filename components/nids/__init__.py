@@ -1,0 +1,1 @@
+# NIDS component package initialization

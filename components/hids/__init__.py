@@ -1,0 +1,1 @@
+# HIDS component package initialization

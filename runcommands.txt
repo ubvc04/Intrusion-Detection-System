@@ -1,0 +1,12 @@
+ # Activate the virtual environment
+>> cd c:\Users\baves\Downloads\IDS
+>> .\venv\Scripts\activate
+>> 
+>> # Run the Manager component
+>> python main.py --component manager --debug
+>> 
+>> # Run the HIDS component
+>> python main.py --component hids --debug
+>> 
+>> # Run the NIDS component
+>> python main.py --component nids --debug

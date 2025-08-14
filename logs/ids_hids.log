@@ -1,0 +1,15 @@
+2025-08-14 14:43:53 - ids.hids - INFO - Initializing HIDS Agent
+2025-08-14 14:45:43 - ids.hids - INFO - Initializing HIDS Agent
+2025-08-14 14:45:43 - ids.hids - INFO - Event Log Monitor initialized for logs: Security, System, Application
+2025-08-14 14:45:43 - ids.hids - INFO - File Integrity Monitor initialized with 3 paths
+2025-08-14 14:45:43 - ids.hids - INFO - Registry Monitor initialized with 10 keys
+2025-08-14 14:45:43 - ids.hids - INFO - Starting HIDS Agent
+2025-08-14 14:45:43 - ids.hids - INFO - Starting Event Log Monitor
+2025-08-14 14:45:43 - ids.hids - INFO - Starting Event Log Monitor
+2025-08-14 14:45:43 - ids.hids - INFO - Starting File Integrity Monitor
+2025-08-14 14:45:43 - ids.hids - INFO - Starting File Integrity Monitor
+2025-08-14 14:45:43 - ids.hids - INFO - Starting Registry Monitor
+2025-08-14 14:45:43 - ids.hids - INFO - Starting Registry Monitor
+2025-08-14 14:45:43 - ids.hids - INFO - HIDS Agent started on VJUNDELLA
+2025-08-14 14:45:43 - ids.hids - INFO - Built registry baseline with 10 keys
+2025-08-14 14:45:48 - ids.hids - INFO - Built registry baseline with 10 keys

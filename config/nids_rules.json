@@ -1,0 +1,115 @@
+[
+    {
+        "id": "NIDS-001",
+        "name": "Port Scan Detection",
+        "detection_type": "port_scan",
+        "description": "Detects port scanning activity from a single source IP",
+        "threshold": 15,
+        "interval": 60,
+        "severity": "medium"
+    },
+    {
+        "id": "NIDS-002",
+        "name": "High Connection Rate",
+        "detection_type": "connection_rate",
+        "description": "Detects abnormally high connection rates from a single source IP",
+        "threshold": 100,
+        "interval": 60,
+        "severity": "medium"
+    },
+    {
+        "id": "NIDS-003",
+        "name": "Malicious IP Connection",
+        "detection_type": "malicious_ip",
+        "description": "Detects connections to/from known malicious IP addresses",
+        "ip_list_file": "config/malicious_ips.txt",
+        "severity": "high"
+    },
+    {
+        "id": "NIDS-004",
+        "name": "Suspicious DNS Request",
+        "detection_type": "dns_request",
+        "description": "Detects DNS requests to suspicious domains or abnormal request rates",
+        "domain_list_file": "config/suspicious_domains.txt",
+        "threshold": 50,
+        "interval": 60,
+        "severity": "medium"
+    },
+    {
+        "id": "NIDS-005",
+        "name": "SQL Injection Attempt",
+        "detection_type": "signature",
+        "description": "Detects SQL injection attempts in HTTP traffic",
+        "pattern": "(?:SELECT|INSERT|UPDATE|DELETE|DROP|UNION).*(?:FROM|INTO|WHERE).*(?:'|\"|\\\\)",
+        "protocol": "tcp",
+        "port": 80,
+        "severity": "high"
+    },
+    {
+        "id": "NIDS-006",
+        "name": "Command Injection Attempt",
+        "detection_type": "signature",
+        "description": "Detects command injection attempts in HTTP traffic",
+        "pattern": "(?:;|\\||`|\\$\\(|\\$\\{).*(?:cat|ls|pwd|whoami|echo|bash|cmd)",
+        "protocol": "tcp",
+        "port": 80,
+        "severity": "high"
+    },
+    {
+        "id": "NIDS-007",
+        "name": "Cross-Site Scripting (XSS) Attempt",
+        "detection_type": "signature",
+        "description": "Detects XSS attempts in HTTP traffic",
+        "pattern": "(?:<script.*?>|javascript:.*?\\(|\\\\x[0-9A-Fa-f]{2}|\\\\u[0-9A-Fa-f]{4}|document\\.cookie|alert\\(|eval\\()",
+        "protocol": "tcp",
+        "port": 80,
+        "severity": "high"
+    },
+    {
+        "id": "NIDS-008",
+        "name": "Directory Traversal Attempt",
+        "detection_type": "signature",
+        "description": "Detects directory traversal attempts in HTTP traffic",
+        "pattern": "(?:\\.\\./|\\.\\./\\.\\./|/etc/passwd|/etc/shadow|/proc/self/|c:\\\\windows\\\\|cmd\\.exe|powershell\\.exe)",
+        "protocol": "tcp",
+        "port": 80,
+        "severity": "high"
+    },
+    {
+        "id": "NIDS-009",
+        "name": "Remote File Inclusion Attempt",
+        "detection_type": "signature",
+        "description": "Detects remote file inclusion attempts in HTTP traffic",
+        "pattern": "(?:=https?://|=ftp://|=php://|=data://|=expect://)",
+        "protocol": "tcp",
+        "port": 80,
+        "severity": "high"
+    },
+    {
+        "id": "NIDS-010",
+        "name": "SMB Exploit Attempt",
+        "detection_type": "signature",
+        "description": "Detects attempts to exploit SMB vulnerabilities",
+        "pattern": "(?:\\\\x00\\\\x00\\\\x00\\\\x00\\\\xff\\\\x53\\\\x4d\\\\x42|\\\\x00\\\\x00\\\\xfb\\\\x40)",
+        "protocol": "tcp",
+        "port": 445,
+        "severity": "critical"
+    },
+    {
+        "id": "NIDS-011",
+        "name": "RDP Brute Force Attempt",
+        "detection_type": "signature",
+        "description": "Detects RDP brute force attempts",
+        "pattern": "(?:\\\\x03\\\\x00\\\\x00\\\\x13\\\\x0e\\\\xe0)",
+        "protocol": "tcp",
+        "port": 3389,
+        "severity": "high"
+    },
+    {
+        "id": "NIDS-012",
+        "name": "General Traffic Settings",
+        "detection_type": "general",
+        "description": "General settings for traffic analysis",
+        "skip_private_traffic": true
+    }
+]
